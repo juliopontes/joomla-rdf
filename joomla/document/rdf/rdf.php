@@ -112,11 +112,49 @@ class JDocumentRDF extends JDocument
  */
 class JRDFNode extends JObject
 {
+	/**
+	 * Node name
+	 * 
+	 * @var	string
+	 */
 	private $elementName;
+	
+	/**
+	 * Value of node
+	 * 
+	 * @var	string
+	 * 
+	 * @since       11.1
+	 */
 	private $value;
+	
+	/**
+	 * Array of attributes
+	 * 
+	 * @var	array
+	 * 
+	 * @since       11.1
+	 */
 	private $_attributes = array();
+	
+	/**
+	 * Array of child nodes
+	 * 
+	 * @var	array
+	 * 
+	 * @since       11.1
+	 */
 	private $_childs = array();
 	
+	/**
+	 * Constructor of JRDFNode
+	 * 
+	 * @param	string	$name
+	 * @param	string	$value
+	 * @param	string	$prefix
+	 * 
+	 * @since       11.1
+	 */
 	public function __construct($name,$value=null,$prefix='rdf:')
 	{
 		$this->_prefix = $prefix;
@@ -125,33 +163,47 @@ class JRDFNode extends JObject
 		$this->value = $value;
 	}
 	
-	public function __call($method_name,$arguments)
-	{
-		if (method_exists($this->dom, $method_name))
-		{
-			
-		}
-		else {
-			parent::__call($method_name,$arguments);
-		}
-	}
-	
+	/**
+	 * Add child node
+	 * 
+	 * @param	JRDFNode	$node
+	 * 
+	 * @since       11.1
+	 */
 	public function addChild(JRDFNode $node)
 	{
 		array_push($this->_childs, $node);
 	}
 	
+	/**
+	 * Add attribute to curret node
+	 * 
+	 * @param	string	$name
+	 * @param	string	$value
+	 * @param	string	$prefix
+	 * 
+	 * @since       11.1
+	 */
 	public function setAttribute($name,$value,$prefix=null)
 	{
+		//get default prefix
 		if (is_null($prefix)) {
 			$prefix = $this->_prefix;
 		}
 		
+		//name of attribute
 		$attributeName = $prefix.$name;
 		
 		$this->_attributes[$attributeName] = $value;
 	}
 	
+	/**
+	 * Return node string
+	 * 
+	 * @return	string
+	 * 
+	 * @since       11.1
+	 */
 	public function __toString()
 	{
 		$node = chr(13).'<'.$this->elementName.$this->attributes();
@@ -174,6 +226,11 @@ class JRDFNode extends JObject
 		return $node;
 	}
 	
+	/**
+	 * @return	all	attributes from current node
+	 * 
+	 * @since       11.1
+	 */
 	final public function attributes()
 	{
 		$attributes = '';
@@ -187,11 +244,25 @@ class JRDFNode extends JObject
 		return $attributes;
 	}
 	
+	/**
+	 * Return number of childs elements
+	 * 
+	 * @return	int	number of childs elements
+	 * 
+	 * @since       11.1
+	 */
 	final public function hasChilds()
 	{
 		return count($this->_childs);
 	}
 	
+	/**
+	 * eturn number of attributes
+	 * 
+	 * @return	int	number of attributes
+	 * 
+	 * @since       11.1
+	 */
 	final public function hasAttributes()
 	{
 		return count($this->_attributes);
